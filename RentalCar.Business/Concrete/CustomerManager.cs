@@ -5,6 +5,7 @@ using RentalCar.Business.BusinessAspects.Autofac;
 using RentalCar.Business.Constants;
 using RentalCar.Business.ValidationRules.FluentValidation;
 using RentalCar.Core.Aspects.Autofac.Caching;
+using RentalCar.Core.Aspects.Autofac.Performance;
 using RentalCar.Core.Business;
 using RentalCar.Core.Utilities.Results.Abstract;
 using RentalCar.Core.Utilities.Results.Concrete;
@@ -23,6 +24,7 @@ using System.Threading.Tasks;
 
 namespace RentalCar.Business.Concrete
 {
+    [PerformanceAspect(5)]
     public class CustomerManager : ICustomerService
     {
         private readonly ICustomerDal _customerDal;
@@ -32,6 +34,7 @@ namespace RentalCar.Business.Concrete
             _customerDal = customerDal;
         }
 
+        [SecuredOperation("Admin")]
         [ValidationAspect(typeof(CustomerValidator))]
         [CacheRemoveAspect("ICustomerService.Get")]
         public IResult Add(Customer customer)
@@ -50,7 +53,8 @@ namespace RentalCar.Business.Concrete
             return new SuccessResult(Messages.AddedCustomer);
         }
 
-
+        [SecuredOperation("Admin")]
+        [CacheRemoveAspect("ICustomerService.Get")]
         public IResult Delete(Customer customer)
         {
             var result = BusinessRules.Run(CheckIfRecordDeleteExist(customer.Id));
@@ -63,6 +67,7 @@ namespace RentalCar.Business.Concrete
             return new SuccessResult(Messages.DeletedCustomer);
         }
 
+        [SecuredOperation("Admin")]
         [ValidationAspect(typeof(CustomerValidator))]
         [CacheRemoveAspect("ICustomerService.Get")]
         public IResult Update(Customer customer)
@@ -77,25 +82,18 @@ namespace RentalCar.Business.Concrete
             return new SuccessResult(Messages.UpdatedCustomer);
         }
 
-        [SecuredOperation("admin")]
+        [SecuredOperation("Admin")]
         [CacheAspect]
         public IDataResult<List<Customer>> GetAll()
         {
             return new SuccessDataResult<List<Customer>>(_customerDal.GetAll(), Messages.ListedCustomers);
         }
 
-        [SecuredOperation("admin")]
+        [SecuredOperation("Admin")]
         [CacheAspect]
         public IDataResult<Customer> GetById(int id)
         {
             return new SuccessDataResult<Customer>(_customerDal.Get(c => c.Id == id));
-        }
-
-        [SecuredOperation("admin")]
-
-        public IDataResult<List<CustomerDetailDto>> GetCustomerDetails()
-        {
-            return new SuccessDataResult<List<CustomerDetailDto>>(_customerDal.GetCustomerDetails(), Messages.ListedCustomerDetails);
         }
 
         private IResult CheckIfRecordUpdateExist(int id)
@@ -126,7 +124,6 @@ namespace RentalCar.Business.Concrete
                 return new SuccessResult();
             }
         }
-
 
         private IResult CheckIfPhoneExist(string phone)
         {

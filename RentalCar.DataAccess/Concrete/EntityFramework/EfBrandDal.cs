@@ -12,21 +12,6 @@ namespace RentalCar.DataAccess.Concrete.EntityFramework
 {
     public class EfBrandDal : EfEntityRepositoryBase<Brand, RentalCarContextDb>, IBrandDal
     {
-        public List<BrandDetailDto> GetBrandDetails()
-        {
-            using (RentalCarContextDb context = new RentalCarContextDb())
-            {
-                var result = from br in context.Brands
-                             select new BrandDetailDto
-                             {
-                                 Name = br.Name,
-                                 Founder = br.Founder,
-                                 FoundedYear = br.FoundedYear,
-                                 Country = br.Country,
-                             };
-                return result.ToList();
 
-            }
-        }
     }
 }

@@ -17,6 +17,5 @@ namespace RentalCar.Business.Abstract
         IResult Update(Color color);
         IDataResult<Color> GetById(int id);
         IDataResult<List<Color>> GetAll();
-        IDataResult<List<ColorDetailDto>> GetColorDetails();
     }
 }

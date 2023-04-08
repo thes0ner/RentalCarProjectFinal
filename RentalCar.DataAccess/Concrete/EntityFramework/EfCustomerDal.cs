@@ -12,24 +12,5 @@ namespace RentalCar.DataAccess.Concrete.EntityFramework
 {
     public class EfCustomerDal : EfEntityRepositoryBase<Customer, RentalCarContextDb>, ICustomerDal
     {
-        public List<CustomerDetailDto> GetCustomerDetails()
-        {
-            using (RentalCarContextDb context = new RentalCarContextDb())
-            {
-
-                var result = from cu in context.Customers
-                             select new CustomerDetailDto
-                             {
-                                 FirstName = cu.FirstName,
-                                 LastName = cu.LastName,
-                                 Email = cu.Email,
-                                 Phone = cu.Phone,
-                                 Address = cu.Address,
-                                 City = cu.City,
-                                 Country = cu.Country
-                             };
-                return result.ToList();
-            }
-        }
     }
 }

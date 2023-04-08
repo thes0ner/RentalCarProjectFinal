@@ -9,19 +9,22 @@ namespace RentalCar.Entities.DTO_s
     public class RentalDetailDto
     {
 
-        //Join Brand,Customer,Car,Rental
-
-
-        public string? FirstName { get; set; }
-        public string? LastName { get; set; }
-        public string? BrandName { get; set; }
-        public string? Model { get; set; }
-        public int Year { get; set; }
-        public decimal DailyPrice { get; set; }
-        public int TotalDays { get; set; }
-        public DateTime RentDate { get; set; }
+        public string FullName { get; set; }
+        public string BrandName { get; set; }
+        public DateTime RentalDate { get; set; }
         public DateTime ReturnDate { get; set; }
-        public decimal TotalPrice { get; set; }
+
+
+        //public string? FirstName { get; set; }
+        //public string? LastName { get; set; }
+        //public string? BrandName { get; set; }
+        //public string? Model { get; set; }
+        //public int Year { get; set; }
+        //public decimal DailyPrice { get; set; }
+        //public int TotalDays { get; set; }
+        //public DateTime RentDate { get; set; }
+        //public DateTime ReturnDate { get; set; }
+        //public decimal TotalPrice { get; set; }
 
     }
 }

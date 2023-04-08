@@ -4,6 +4,7 @@ using RentalCar.Business.BusinessAspects.Autofac;
 using RentalCar.Business.Constants;
 using RentalCar.Business.ValidationRules.FluentValidation;
 using RentalCar.Core.Aspects.Autofac.Caching;
+using RentalCar.Core.Aspects.Autofac.Performance;
 using RentalCar.Core.Business;
 using RentalCar.Core.Utilities.Results.Abstract;
 using RentalCar.Core.Utilities.Results.Concrete;
@@ -20,6 +21,7 @@ using System.Threading.Tasks;
 
 namespace RentalCar.Business.Concrete
 {
+    [PerformanceAspect(5)]
     public class CarManager : ICarService
     {
         private readonly ICarDal _carDal;
@@ -29,13 +31,17 @@ namespace RentalCar.Business.Concrete
             _carDal = carDal;
         }
 
+        [SecuredOperation("Car.all,Admin")]
+        [ValidationAspect(typeof(CarValidator))]
+        [CacheRemoveAspect("ICarService.Get")]
         public IResult Add(Car car)
         {
             _carDal.Add(car);
             return new SuccessResult(Messages.AddedCar);
         }
 
-
+        [SecuredOperation("Car.all,Admin")]
+        [CacheRemoveAspect("ICarService.Get")]
         public IResult Delete(Car car)
         {
             var result = BusinessRules.Run(CheckIfRecordDeleteExist(car.Id));
@@ -48,7 +54,9 @@ namespace RentalCar.Business.Concrete
             return new SuccessResult(Messages.DeletedCar);
         }
 
-
+        [SecuredOperation("Car.all,Admin")]
+        [ValidationAspect(typeof(CarValidator))]
+        [CacheRemoveAspect("ICarService.Get")]
         public IResult Update(Car car)
         {
             var result = BusinessRules.Run(CheckIfRecordUpdateExist(car.Id));
@@ -61,38 +69,27 @@ namespace RentalCar.Business.Concrete
             return new SuccessResult(Messages.UpdatedCar);
         }
 
+        [SecuredOperation("Car.all,Admin")]
         [CacheAspect]
         public IDataResult<List<Car>> GetAll()
         {
             return new SuccessDataResult<List<Car>>(_carDal.GetAll(), Messages.ListedCars);
         }
 
-
+        [SecuredOperation("Car.all,Admin")]
         [CacheAspect]
         public IDataResult<Car> GetById(int id)
         {
             return new SuccessDataResult<Car>(_carDal.Get(c => c.Id == id));
         }
 
-
+        [SecuredOperation("Car.all,Admin")]
         [CacheAspect]
         public IDataResult<List<CarDetailDto>> GetCarDetails()
         {
             return new SuccessDataResult<List<CarDetailDto>>(_carDal.GetCarDetails(), Messages.ListedCarDetails);
 
         }
-
-        //private IResult CheckIfCarModelExist(string modelName, int year)
-        //{
-        //    var result = _carDal.GetAll(c => c.Model == modelName && c.Year == year).Any();
-
-        //    if (result)
-        //    {
-        //        return new ErrorResult(Messages.CarModelAlreadyExist);
-        //    }
-        //    return new SuccessResult();
-
-        //}
 
         private IResult CheckIfRecordUpdateExist(int id)
         {

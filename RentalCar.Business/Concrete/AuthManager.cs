@@ -1,5 +1,8 @@
-﻿using RentalCar.Business.Abstract;
+﻿using Core.Aspects.Autofac.Validation;
+using RentalCar.Business.Abstract;
 using RentalCar.Business.Constants;
+using RentalCar.Business.ValidationRules.FluentValidation;
+using RentalCar.Core.Aspects.Autofac.Performance;
 using RentalCar.Core.Entities.Concrete;
 using RentalCar.Core.Utilities.Results.Abstract;
 using RentalCar.Core.Utilities.Results.Concrete;
@@ -14,6 +17,7 @@ using System.Threading.Tasks;
 
 namespace RentalCar.Business.Concrete
 {
+    [PerformanceAspect(20)]
     public class AuthManager : IAuthService
     {
         private readonly ITokenHelper _tokenHelper;
@@ -25,6 +29,7 @@ namespace RentalCar.Business.Concrete
             _tokenHelper = tokenHelper;
         }
 
+        [ValidationAspect(typeof(AuthValidator))]
         public IDataResult<User> Register(UserForRegisterDto userForRegisterDto)
         {
             byte[] passwordHash, passwordSalt;

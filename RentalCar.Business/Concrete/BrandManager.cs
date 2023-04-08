@@ -4,6 +4,7 @@ using RentalCar.Business.BusinessAspects.Autofac;
 using RentalCar.Business.Constants;
 using RentalCar.Business.ValidationRules.FluentValidation;
 using RentalCar.Core.Aspects.Autofac.Caching;
+using RentalCar.Core.Aspects.Autofac.Performance;
 using RentalCar.Core.Business;
 using RentalCar.Core.Utilities.Results.Abstract;
 using RentalCar.Core.Utilities.Results.Concrete;
@@ -20,6 +21,7 @@ using System.Threading.Tasks;
 
 namespace RentalCar.Business.Concrete
 {
+    [PerformanceAspect(20)]
     public class BrandManager : IBrandService
     {
         private readonly IBrandDal _brandDal;
@@ -29,7 +31,9 @@ namespace RentalCar.Business.Concrete
             _brandDal = brandDal;
         }
 
-
+        [SecuredOperation("Brand.all,Admin")]
+        [ValidationAspect(typeof(BrandValidator))]
+        [CacheRemoveAspect("IBrandService.Get")]
         public IResult Add(Brand brand)
         {
 
@@ -44,7 +48,8 @@ namespace RentalCar.Business.Concrete
             return new SuccessResult(Messages.AddedBrand);
         }
 
-
+        [SecuredOperation("Brand.all,Admin")]
+        [CacheRemoveAspect("IBrandService.Get")]
         public IResult Delete(Brand brand)
         {
             var result = BusinessRules.Run(CheckIfRecordDeleteExist(brand.Id));
@@ -57,6 +62,9 @@ namespace RentalCar.Business.Concrete
             return new SuccessResult(Messages.DeletedBrand);
         }
 
+        [SecuredOperation("Brand.all,Admin")]
+        [ValidationAspect(typeof(BrandValidator))]
+        [CacheRemoveAspect("IBrandService.Get")]
         public IResult Update(Brand brand)
         {
             var result = BusinessRules.Run(CheckIfRecordUpdateExist(brand.Id));
@@ -70,22 +78,19 @@ namespace RentalCar.Business.Concrete
             return new SuccessResult(Messages.UpdatedBrand);
         }
 
+        [SecuredOperation("Brand.all,Admin")]
+        [CacheAspect]
         public IDataResult<List<Brand>> GetAll()
         {
             return new SuccessDataResult<List<Brand>>(_brandDal.GetAll(), Messages.ListedBrands);
         }
 
+        [SecuredOperation("Brand.all,Admin")]
+        [CacheAspect]
         public IDataResult<Brand> GetById(int id)
         {
             return new SuccessDataResult<Brand>(_brandDal.Get(p => p.Id == id));
         }
-
-
-        public IDataResult<List<BrandDetailDto>> GetBrandDetails()
-        {
-            return new SuccessDataResult<List<BrandDetailDto>>(_brandDal.GetBrandDetails(), Messages.ListedBrandDetails);
-        }
-
 
         /// <summary>
         /// Checks whether Brand Name exist 

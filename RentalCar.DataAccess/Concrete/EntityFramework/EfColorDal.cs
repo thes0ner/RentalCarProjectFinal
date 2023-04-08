@@ -12,18 +12,6 @@ namespace RentalCar.DataAccess.Concrete.EntityFramework
 {
     public class EfColorDal : EfEntityRepositoryBase<Color, RentalCarContextDb>, IColorDal
     {
-        public List<ColorDetailDto> GetColorDetails()
-        {
-            using (RentalCarContextDb context = new RentalCarContextDb())
-            {
-                var result = from co in context.Colors
-                             select new ColorDetailDto
-                             {
-                                 Name = co.Name,
-                                 HexCode = co.HexCode,
-                             };
-                return result.ToList();
-            }
-        }
+
     }
 }

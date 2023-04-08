@@ -40,23 +40,6 @@ namespace RentalCar.DataAccess.Concrete.EntityFramework
             }
         }
 
-        //protected override void OnModelCreating(ModelBuilder modelBuilder)
-        //{
-
-        //    modelBuilder.Entity<CarImage>().ToTable("CarImages");
-
-        //    modelBuilder.Entity<CarImage>(entity =>
-        //    entity.HasOne(c => c.Car)
-        //            .WithMany(c => c.CarImages)
-        //            .HasForeignKey(c => c.CarId)
-        //            .HasConstraintName("FK_CarImages_Cars")
-        //            .OnDelete(DeleteBehavior.Cascade)
-
-        //    );
-
-
-        //}
-
 
     }
 }

@@ -5,6 +5,7 @@ using RentalCar.Business.BusinessAspects.Autofac;
 using RentalCar.Business.Constants;
 using RentalCar.Business.ValidationRules.FluentValidation;
 using RentalCar.Core.Aspects.Autofac.Caching;
+using RentalCar.Core.Aspects.Autofac.Performance;
 using RentalCar.Core.Business;
 using RentalCar.Core.Utilities.Results.Abstract;
 using RentalCar.Core.Utilities.Results.Concrete;
@@ -21,6 +22,7 @@ using System.Threading.Tasks;
 
 namespace RentalCar.Business.Concrete
 {
+    [PerformanceAspect(5)]
     public class RentalManager : IRentalService
     {
         private readonly IRentalDal _rentalDal;
@@ -30,7 +32,7 @@ namespace RentalCar.Business.Concrete
             _rentalDal = rentalDal;
         }
 
-        [SecuredOperation("admin,add")]
+        [SecuredOperation("Rental.all,Admin")]
         [ValidationAspect(typeof(RentalValidator))]
         [CacheRemoveAspect("IRentalService.Get")]
         public IResult Add(Rental rental)
@@ -45,6 +47,8 @@ namespace RentalCar.Business.Concrete
             return new SuccessResult(Messages.AddedRental);
         }
 
+        [SecuredOperation("Rental.all,Admin")]
+        [CacheRemoveAspect("IRentalService.Get")]
         public IResult Delete(Rental rental)
         {
             var result = BusinessRules.Run(CheckIfRecordDeleteExist(rental.Id));
@@ -57,6 +61,7 @@ namespace RentalCar.Business.Concrete
             return new SuccessResult(Messages.DeletedRental);
         }
 
+        [SecuredOperation("Rental.all,Admin")]
         [ValidationAspect(typeof(RentalValidator))]
         [CacheRemoveAspect("IRentalService.Get")]
         public IResult Update(Rental rental)
@@ -72,21 +77,21 @@ namespace RentalCar.Business.Concrete
         }
 
 
-        [SecuredOperation("admin,list")]
+        [SecuredOperation("Rental.all,Admin")]
         [CacheAspect]
         public IDataResult<List<Rental>> GetAll()
         {
             return new SuccessDataResult<List<Rental>>(_rentalDal.GetAll(), Messages.ListedRentals);
         }
 
-        [SecuredOperation("admin,list")]
+        [SecuredOperation("Rental.all,Admin")]
         [CacheAspect]
         public IDataResult<Rental> GetById(int id)
         {
             return new SuccessDataResult<Rental>(_rentalDal.Get(c => c.Id == id));
         }
 
-        [SecuredOperation("admin,list")]
+        [SecuredOperation("Rental.all,Admin")]
         [CacheAspect]
         public IDataResult<List<RentalDetailDto>> GetRentalDetails()
         {

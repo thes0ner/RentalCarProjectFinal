@@ -3,6 +3,7 @@ using RentalCar.Business.Abstract;
 using RentalCar.Business.BusinessAspects.Autofac;
 using RentalCar.Business.ValidationRules.FluentValidation;
 using RentalCar.Core.Aspects.Autofac.Caching;
+using RentalCar.Core.Aspects.Autofac.Performance;
 using RentalCar.Core.Entities.Concrete;
 using RentalCar.Core.Utilities.Results.Abstract;
 using RentalCar.Core.Utilities.Results.Concrete;
@@ -16,6 +17,7 @@ using System.Threading.Tasks;
 
 namespace RentalCar.Business.Concrete
 {
+    [PerformanceAspect(5)]
     public class UserManager : IUserService
     {
         IUserDal _userDal;
@@ -26,17 +28,12 @@ namespace RentalCar.Business.Concrete
         }
 
 
-        [ValidationAspect(typeof(UserValidator))]
-        [CacheRemoveAspect("IUserService.Get")]
         public IResult Add(User user)
         {
             _userDal.Add(user);
             return new SuccessResult();
         }
 
-
-        [ValidationAspect(typeof(UserValidator))]
-        [CacheRemoveAspect("IUserService.Get")]
         public IResult Update(User user)
         {
             _userDal.Update(user);
@@ -49,28 +46,24 @@ namespace RentalCar.Business.Concrete
             return new SuccessResult();
         }
 
-        [CacheAspect]
         public List<OperationClaim> GetClaims(User user)
         {
             var result = _userDal.GetClaims(user);
             return result;
         }
 
-        [CacheAspect]
+
         public IDataResult<List<User>> GetById(int userId)
         {
             return new SuccessDataResult<List<User>>(_userDal.GetAll(u => userId == u.Id));
         }
 
 
-        [CacheAspect]
         public IDataResult<List<User>> GetAll()
         {
             return new SuccessDataResult<List<User>>(_userDal.GetAll());
         }
 
-
-        [CacheAspect]
         public User GetByEmail(string email)
         {
             var result = _userDal.Get(u => u.Email == email);

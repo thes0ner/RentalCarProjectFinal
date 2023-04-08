@@ -92,16 +92,5 @@ namespace RentalCar.WebAPI.Controllers
             }
         }
 
-        [HttpGet("getcustomerdetails")]
-        public IActionResult GetCustomerDetails()
-        {
-            var result = _customerService.GetCustomerDetails();
-            if (result.Success)
-            {
-                return Ok(result);
-            }
-            else
-                return BadRequest(result);
-        }
     }
 }

@@ -17,6 +17,5 @@ namespace RentalCar.Business.Abstract
         IResult Update(Customer customer);
         IDataResult<Customer> GetById(int id);
         IDataResult<List<Customer>> GetAll();
-        IDataResult<List<CustomerDetailDto>> GetCustomerDetails();
     }
 }

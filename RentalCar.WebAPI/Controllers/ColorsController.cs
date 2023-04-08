@@ -78,17 +78,6 @@ namespace RentalCar.WebAPI.Controllers
                 return BadRequest(result);
         }
 
-        [HttpGet("getcolordetails")]
-        public IActionResult GetColorDetails()
-        {
-            var result = _colorService.GetColorDetails();
-            if (result.Success)
-            {
-                return Ok(result);
-            }
-            else
-                return BadRequest(result);
-        }
 
     }
 }

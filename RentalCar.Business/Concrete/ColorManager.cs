@@ -3,6 +3,8 @@ using RentalCar.Business.Abstract;
 using RentalCar.Business.BusinessAspects.Autofac;
 using RentalCar.Business.Constants;
 using RentalCar.Business.ValidationRules.FluentValidation;
+using RentalCar.Core.Aspects.Autofac.Caching;
+using RentalCar.Core.Aspects.Autofac.Performance;
 using RentalCar.Core.Business;
 using RentalCar.Core.Utilities.Results.Abstract;
 using RentalCar.Core.Utilities.Results.Concrete;
@@ -19,6 +21,7 @@ using System.Threading.Tasks;
 
 namespace RentalCar.Business.Concrete
 {
+    [PerformanceAspect(5)]
     public class ColorManager : IColorService
     {
         private readonly IColorDal _colorDal;
@@ -28,7 +31,9 @@ namespace RentalCar.Business.Concrete
             _colorDal = colorDal;
         }
 
-        //[ValidationAspect(typeof(ColorValidator))]
+        [SecuredOperation("Color.all,Admin")]
+        [ValidationAspect(typeof(ColorValidator))]
+        [CacheRemoveAspect("IColorService.Get")]
         public IResult Add(Color color)
         {
 
@@ -42,6 +47,8 @@ namespace RentalCar.Business.Concrete
         }
 
 
+        [SecuredOperation("Color.all,Admin")]
+        [CacheRemoveAspect("IColorService.Get")]
         public IResult Delete(Color color)
         {
             var result = BusinessRules.Run(CheckIfRecordDeleteExist(color.Id));
@@ -54,7 +61,9 @@ namespace RentalCar.Business.Concrete
             return new SuccessResult(Messages.DeletedColor);
         }
 
-        //[ValidationAspect(typeof(ColorValidator))]
+        [SecuredOperation("Color.all,Admin")]
+        [ValidationAspect(typeof(ColorValidator))]
+        [CacheRemoveAspect("IColorService.Get")]
         public IResult Update(Color color)
         {
             var result = BusinessRules.Run(CheckIfRecordUpdateExist(color.Id));
@@ -66,22 +75,22 @@ namespace RentalCar.Business.Concrete
             return new SuccessResult(Messages.UpdatedColor);
         }
 
-
+        [SecuredOperation("Color.all,Admin")]
+        [CacheAspect]
         public IDataResult<List<Color>> GetAll()
         {
             return new SuccessDataResult<List<Color>>(_colorDal.GetAll(), Messages.ListedColors);
         }
 
+        [SecuredOperation("Color.all,Admin")]
+        [CacheAspect]
         public IDataResult<Color> GetById(int id)
         {
             return new SuccessDataResult<Color>(_colorDal.Get(c => c.Id == id));
         }
 
 
-        public IDataResult<List<ColorDetailDto>> GetColorDetails()
-        {
-            return new SuccessDataResult<List<ColorDetailDto>>(_colorDal.GetColorDetails(), Messages.ListedColorDetails);
-        }
+
 
         private IResult CheckIfColorNameExist(string name)
         {
@@ -94,7 +103,6 @@ namespace RentalCar.Business.Concrete
             }
             return new SuccessResult();
         }
-
 
         private IResult CheckIfRecordUpdateExist(int id)
         {

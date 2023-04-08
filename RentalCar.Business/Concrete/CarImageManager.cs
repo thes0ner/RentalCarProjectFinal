@@ -26,13 +26,14 @@ namespace RentalCar.Business.Concrete
     public class CarImageManager : ICarImageService
     {
         ICarImageDal _carImageDal;
+        ICarService _carService;
 
         public CarImageManager(ICarImageDal carImageDal)
         {
             _carImageDal = carImageDal;
         }
 
-        [SecuredOperation("admin,add")]
+        [SecuredOperation("Admin,Images.All")]
         [ValidationAspect(typeof(CarImageValidator))]
         [CacheRemoveAspect("ICarImageService.Get")]
         public IResult Add(IFormFile file, CarImage carImage)
@@ -50,6 +51,8 @@ namespace RentalCar.Business.Concrete
             return new SuccessResult(Messages.CarImageAdded);
         }
 
+        [SecuredOperation("Admin,Images.All")]
+        [CacheRemoveAspect("ICarImageService.Get")]
         public IResult Delete(CarImage carImage)
         {
             File.Delete(carImage.ImagePath);
@@ -58,6 +61,7 @@ namespace RentalCar.Business.Concrete
         }
 
 
+        [SecuredOperation("Admin,Images.All")]
         [ValidationAspect(typeof(CarImageValidator))]
         [CacheRemoveAspect("ICarImageService.Get")]
         public IResult Update(IFormFile file, CarImage carImage)
@@ -70,37 +74,32 @@ namespace RentalCar.Business.Concrete
             }
         }
 
-        [SecuredOperation("admin,list")]
+        [SecuredOperation("Admin,Images.All")]
         [CacheAspect]
         public IDataResult<List<CarImage>> GetAll()
         {
             return new SuccessDataResult<List<CarImage>>(_carImageDal.GetAll());
         }
 
-        [SecuredOperation("admin,list")]
+        [SecuredOperation("Admin,Images.All")]
         [CacheAspect]
         public IDataResult<CarImage> GetById(int carImageId)
         {
             return new SuccessDataResult<CarImage>(_carImageDal.Get(c => c.Id == carImageId));
         }
 
-        [SecuredOperation("admin,list")]
+        [SecuredOperation("Admin,Images.All")]
         [CacheAspect]
         public IDataResult<List<CarImage>> GetImagesByCarId(int carId)
         {
-            var carImage = _carImageDal.GetAll().Where(c => c.CarId == carId).ToList();
-            if (carImage.Count == 0)
-            {
-                List<CarImage> carImages = new List<CarImage>();
-                carImages.Add(new CarImage { CarId = carId, ImagePath = "wwwroot/Images/DefaultImage.jpg", Date = DateTime.Now });
-                return new SuccessDataResult<List<CarImage>>(carImages);
-            }
-            return new SuccessDataResult<List<CarImage>>(_carImageDal.GetAll(c => c.CarId == carId).ToList());
+            //Error needs update
+            List<CarImage> carImages = new List<CarImage>();
+            carImages.Add(new CarImage { CarId = carId, ImagePath = "wwwroot/Images/DefaultImage.jpg", Date = DateTime.Now });
+            return new SuccessDataResult<List<CarImage>>(carImages);
 
         }
 
 
-        //Car must have maximum 5 images.
         private IResult CheckIfImageLimitExceeded(int carId)
         {
             var carImageCount = _carImageDal.GetAll(c => c.CarId == carId).Count;
