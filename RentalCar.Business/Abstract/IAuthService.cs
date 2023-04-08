@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace RentalCar.Business.Abstract
 {
-    //3.48
+    
     public interface IAuthService
     {
         IDataResult<User> Register(UserForRegisterDto userForRegisterDto);
