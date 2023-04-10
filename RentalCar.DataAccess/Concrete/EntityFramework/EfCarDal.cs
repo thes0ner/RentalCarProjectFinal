@@ -5,7 +5,9 @@ using RentalCar.Entities.Concrete;
 using RentalCar.Entities.DTO_s;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
+using System.Runtime.ConstrainedExecution;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -22,16 +24,21 @@ namespace RentalCar.DataAccess.Concrete.EntityFramework
                              on ca.BrandId equals br.Id
                              join co in context.Colors
                              on ca.ColorId equals co.Id
+                             join carImage in context.CarImages
+                             on ca.Id equals carImage.CarId into Images
+                             from image in Images.DefaultIfEmpty()
+                             group new { ca, br, co, image } by ca.Id
+                into carGroup
                              select new CarDetailDto
                              {
-                                 BrandName = br.Name,
-                                 ColorName = co.Name,
-                                 Model = ca.Model,
-                                 Year = ca.Year,
-                                 DailyPrice = ca.DailyPrice,
-                                 FuelType = ca.FuelType,
-                                 Mileage = ca.Mileage,
-                                 Description = ca.Description,
+                                 BrandName = carGroup.First().br.Name,
+                                 ColorName = carGroup.First().co.Name,
+                                 Model = carGroup.First().ca.Model,
+                                 Year = carGroup.First().ca.Year,
+                                 DailyPrice = carGroup.First().ca.DailyPrice,
+                                 FuelType = carGroup.First().ca.FuelType,
+                                 Mileage = carGroup.First().ca.Mileage,
+                                 ImagePath = carGroup.Select(c => c.image == null ? "DefaultImage.jpg" : c.image.ImagePath).ToList()
 
                              };
                 return result.ToList();

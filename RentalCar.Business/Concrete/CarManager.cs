@@ -69,7 +69,7 @@ namespace RentalCar.Business.Concrete
             return new SuccessResult(Messages.UpdatedCar);
         }
 
-        [SecuredOperation("Car.all,Admin")]
+        //[SecuredOperation("Car.all,Admin")]
         [CacheAspect]
         public IDataResult<List<Car>> GetAll()
         {
@@ -83,7 +83,7 @@ namespace RentalCar.Business.Concrete
             return new SuccessDataResult<Car>(_carDal.Get(c => c.Id == id));
         }
 
-        [SecuredOperation("Car.all,Admin")]
+        //[SecuredOperation("Car.all,Admin")]
         [CacheAspect]
         public IDataResult<List<CarDetailDto>> GetCarDetails()
         {

@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using RentalCar.Business.Abstract;
 using RentalCar.Business.Concrete;
 using RentalCar.Core.Utilities.Helpers;
+using RentalCar.Core.Utilities.Helpers.FileHelper;
 using RentalCar.Core.Utilities.Security.JWT;
 using RentalCar.DataAccess.Abstract;
 using RentalCar.DataAccess.Concrete.EntityFramework;
@@ -44,10 +45,11 @@ namespace RentalCar.Business.DependencyResolvers.Autofac
 
             builder.RegisterType<AuthManager>().As<IAuthService>().SingleInstance();
             builder.RegisterType<JwtHelper>().As<ITokenHelper>().SingleInstance();
+;
+            builder.RegisterType<FileHelperManager>().As<IFileHelper>().SingleInstance();
 
 
             var assembly = System.Reflection.Assembly.GetExecutingAssembly();
-
             builder.RegisterAssemblyTypes(assembly).AsImplementedInterfaces()
                 .EnableInterfaceInterceptors(new ProxyGenerationOptions()
                 {

@@ -17,7 +17,7 @@ namespace RentalCar.Entities.DTO_s
         public decimal DailyPrice { get; set; }
         public string? FuelType { get; set; }
         public decimal Mileage { get; set; }
-        public string? Description { get; set; }
+        public List<string> ImagePath { get; set; }
 
     }
 }

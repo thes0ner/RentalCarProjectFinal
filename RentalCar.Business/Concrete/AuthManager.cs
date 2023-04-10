@@ -17,7 +17,7 @@ using System.Threading.Tasks;
 
 namespace RentalCar.Business.Concrete
 {
-    [PerformanceAspect(20)]
+    [PerformanceAspect(5)]
     public class AuthManager : IAuthService
     {
         private readonly ITokenHelper _tokenHelper;

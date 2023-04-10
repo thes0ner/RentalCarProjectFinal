@@ -20,6 +20,9 @@ builder.Host.ConfigureContainer<ContainerBuilder>(builder =>
 });
 //End.
 
+//CORS DI
+builder.Services.AddCors();
+
 //JWT's Configurations
 var tokenOptions = builder.Configuration.GetSection("TokenOptions").Get<TokenOptions>();
 
@@ -57,6 +60,9 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+//CORS Request!
+app.UseCors(builder=>builder.WithOrigins("http://localhost:4200").AllowAnyHeader());
 
 app.UseHttpsRedirection();
 

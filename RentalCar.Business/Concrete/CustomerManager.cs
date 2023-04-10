@@ -96,6 +96,11 @@ namespace RentalCar.Business.Concrete
             return new SuccessDataResult<Customer>(_customerDal.Get(c => c.Id == id));
         }
 
+        public IDataResult<List<CustomerDetailDto>> GetCustomerDetails()
+        {
+            return new SuccessDataResult<List<CustomerDetailDto>>(_customerDal.GetCustomerDetails());
+        }
+
         private IResult CheckIfRecordUpdateExist(int id)
         {
             var result = _customerDal.GetAll(c => c.Id == id).Any();
@@ -144,5 +149,7 @@ namespace RentalCar.Business.Concrete
             }
             return new SuccessResult();
         }
+
+
     }
 }

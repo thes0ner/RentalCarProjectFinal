@@ -75,7 +75,7 @@ namespace RentalCar.Business.Concrete
             return new SuccessResult(Messages.UpdatedColor);
         }
 
-        [SecuredOperation("Color.all,Admin")]
+        //[SecuredOperation("Color.all,Admin")]
         [CacheAspect]
         public IDataResult<List<Color>> GetAll()
         {

@@ -91,7 +91,7 @@ namespace RentalCar.Business.Concrete
             return new SuccessDataResult<Rental>(_rentalDal.Get(c => c.Id == id));
         }
 
-        [SecuredOperation("Rental.all,Admin")]
+        //[SecuredOperation("Rental.all,Admin")]
         [CacheAspect]
         public IDataResult<List<RentalDetailDto>> GetRentalDetails()
         {

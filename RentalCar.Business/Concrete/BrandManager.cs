@@ -21,7 +21,7 @@ using System.Threading.Tasks;
 
 namespace RentalCar.Business.Concrete
 {
-    [PerformanceAspect(20)]
+    [PerformanceAspect(5)]
     public class BrandManager : IBrandService
     {
         private readonly IBrandDal _brandDal;
@@ -78,14 +78,14 @@ namespace RentalCar.Business.Concrete
             return new SuccessResult(Messages.UpdatedBrand);
         }
 
-        [SecuredOperation("Brand.all,Admin")]
+        //[SecuredOperation("Brand.all,Admin")]
         [CacheAspect]
         public IDataResult<List<Brand>> GetAll()
         {
             return new SuccessDataResult<List<Brand>>(_brandDal.GetAll(), Messages.ListedBrands);
         }
 
-        [SecuredOperation("Brand.all,Admin")]
+        //[SecuredOperation("Brand.all,Admin")]
         [CacheAspect]
         public IDataResult<Brand> GetById(int id)
         {

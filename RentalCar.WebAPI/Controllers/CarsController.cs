@@ -56,6 +56,7 @@ namespace RentalCar.WebAPI.Controllers
         [HttpGet("getall")]
         public IActionResult GetAll()
         {
+
             var result = _carService.GetAll();
             if (result.Success)
             {
