@@ -31,8 +31,8 @@ namespace RentalCar.Business.Concrete
             _carDal = carDal;
         }
 
-        [SecuredOperation("Car.all,Admin")]
-        [ValidationAspect(typeof(CarValidator))]
+        //[SecuredOperation("Car.all,Admin")]
+        //[ValidationAspect(typeof(CarValidator))]
         [CacheRemoveAspect("ICarService.Get")]
         public IResult Add(Car car)
         {
