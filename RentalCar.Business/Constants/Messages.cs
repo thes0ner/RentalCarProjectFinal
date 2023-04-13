@@ -41,6 +41,7 @@ namespace RentalCar.Business.Constants
         public static string ListedUsers = "Users listed.";
 
         public static string ListedCarDetails = "Car Details.";
+        public static string ListedCarDetailsByBrand = "Car Details.";
         public static string ListedBrandDetails = "Brand Details.";
         public static string ListedColorDetails = "Color Details.";
         public static string ListedCustomerDetails = "Customer Details.";

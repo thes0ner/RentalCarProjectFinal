@@ -36,8 +36,38 @@ namespace RentalCar.DataAccess.Concrete.EntityFramework
                                  Model = carGroup.First().ca.Model,
                                  Year = carGroup.First().ca.Year,
                                  DailyPrice = carGroup.First().ca.DailyPrice,
-                                 FuelType = carGroup.First().ca.FuelType,
                                  Mileage = carGroup.First().ca.Mileage,
+                                 FuelType = carGroup.First().ca.FuelType,
+                                 Description = carGroup.First().ca.Description,
+                                 ImagePath = carGroup.Select(c => c.image == null ? "DefaultImage.jpg" : c.image.ImagePath).ToList()
+
+                             };
+                return result.ToList();
+            }
+        }
+
+        public List<CarDetailDto> GetCarDetailsByBrand(int brandId)
+        {
+            using (RentalCarContextDb context = new RentalCarContextDb())
+            {
+                var result = from ca in context.Cars
+                             where ca.BrandId == brandId
+                             join br in context.Brands on ca.BrandId equals br.Id
+                             join co in context.Colors on ca.ColorId equals co.Id
+                             join carImage in context.CarImages on ca.Id equals carImage.CarId into Images
+                             from image in Images.DefaultIfEmpty()
+                             group new { ca, br, co, image } by ca.Id
+                into carGroup
+                             select new CarDetailDto
+                             {
+                                 BrandName = carGroup.First().br.Name,
+                                 ColorName = carGroup.First().co.Name,
+                                 Model = carGroup.First().ca.Model,
+                                 Year = carGroup.First().ca.Year,
+                                 DailyPrice = carGroup.First().ca.DailyPrice,
+                                 Mileage = carGroup.First().ca.Mileage,
+                                 FuelType = carGroup.First().ca.FuelType,
+                                 Description = carGroup.First().ca.Description,
                                  ImagePath = carGroup.Select(c => c.image == null ? "DefaultImage.jpg" : c.image.ImagePath).ToList()
 
                              };

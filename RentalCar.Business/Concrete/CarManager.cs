@@ -76,7 +76,15 @@ namespace RentalCar.Business.Concrete
             return new SuccessDataResult<List<Car>>(_carDal.GetAll(), Messages.ListedCars);
         }
 
-        [SecuredOperation("Car.all,Admin")]
+        //[SecuredOperation("Car.all,Admin")]
+        [CacheAspect]
+        public IDataResult<List<CarDetailDto>> GetByBrandId(int id)
+        {
+            return new SuccessDataResult<List<CarDetailDto>>(_carDal.GetCarDetailsByBrand(id), Messages.ListedCarDetailsByBrand);
+        }
+
+
+        //[SecuredOperation("Car.all,Admin")]
         [CacheAspect]
         public IDataResult<Car> GetById(int id)
         {
@@ -90,6 +98,7 @@ namespace RentalCar.Business.Concrete
             return new SuccessDataResult<List<CarDetailDto>>(_carDal.GetCarDetails(), Messages.ListedCarDetails);
 
         }
+
 
         private IResult CheckIfRecordUpdateExist(int id)
         {
@@ -120,7 +129,6 @@ namespace RentalCar.Business.Concrete
             }
         }
 
-
-
+ 
     }
 }

@@ -54,7 +54,7 @@ namespace RentalCar.Core.CrossCuttingConcerns.Caching.Microsoft
             if (cacheEntriesFieldCollectionDefinition != null)
             {
                 var coherentStateValueCollection = cacheEntriesFieldCollectionDefinition.GetValue(_memoryCache);
-                var entriesCollectionValueCollection = coherentStateValueCollection.GetType()
+                var entriesCollectionValueCollection = coherentStateValueCollection?.GetType()
                     .GetProperty(
                         "EntriesCollection",
                         System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance

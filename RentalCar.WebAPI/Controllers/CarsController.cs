@@ -79,6 +79,19 @@ namespace RentalCar.WebAPI.Controllers
                 return BadRequest(result);
         }
 
+        [HttpGet("getbybrand")]
+        public IActionResult GetByBrandId(int id)
+        {
+            var result = _carService.GetByBrandId(id);
+            if (result.Success)
+            {
+                return Ok(result);
+            }
+            else
+                return BadRequest(result);
+        }
+
+
         [HttpGet("getcardetails")]
         public IActionResult GetCarDetails()
         {
