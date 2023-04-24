@@ -8,44 +8,11 @@ namespace RentalCar.WebAPI.Controllers
     [ApiController]
     public class CarImagesController : ControllerBase
     {
-        ICarImageService _carImageService;
+        private ICarImageService _carImageService;
+
         public CarImagesController(ICarImageService carImageService)
         {
             _carImageService = carImageService;
-        }
-
-        [HttpPost("add")]
-        public IActionResult Add([FromForm] IFormFile file, [FromForm] CarImage carImage)
-        {
-            var result = _carImageService.Add(file, carImage);
-            if (result.Success)
-            {
-                return Ok(result);
-            }
-            return BadRequest(result);
-        }
-
-        [HttpPost("delete")]
-        public IActionResult Delete(CarImage carImage)
-        {
-            var carDeleteImage = _carImageService.GetByImageId(carImage.Id).Data;
-            var result = _carImageService.Delete(carDeleteImage);
-            if (result.Success)
-            {
-                return Ok(result);
-            }
-            return BadRequest(result);
-        }
-
-        [HttpPost("update")]
-        public IActionResult Update([FromForm] IFormFile file, [FromForm] CarImage carImage)
-        {
-            var result = _carImageService.Update(file, carImage);
-            if (result.Success)
-            {
-                return Ok(result);
-            }
-            return BadRequest(result);
         }
 
         [HttpGet("getall")]
@@ -59,8 +26,8 @@ namespace RentalCar.WebAPI.Controllers
             return BadRequest(result);
         }
 
-        [HttpGet("getbycarid")]
-        public IActionResult GetByCarId(int carId)
+        [HttpGet("getimagesbycarid")]
+        public IActionResult GetImagesByCarId(int carId)
         {
             var result = _carImageService.GetByCarId(carId);
             if (result.Success)
@@ -70,16 +37,54 @@ namespace RentalCar.WebAPI.Controllers
             return BadRequest(result);
         }
 
-        [HttpGet("getbyimageid")]
-        public IActionResult GetByImageId(int imageId)
+        [HttpGet("getbyid")]
+        public IActionResult GetById(int id)
         {
-            var result = _carImageService.GetByImageId(imageId);
+            var result = _carImageService.GetByImageId(id);
             if (result.Success)
             {
                 return Ok(result);
             }
             return BadRequest(result);
         }
+        //Burda fromform name= "Image" ifadesi bizim postmanden dosyayı eklerken Body kısmındaki form-data'dan Image adıyla dosya atmamıza yarıyor.
+        //Yani Postmande Image yazıp tikleyip dosyamızı seçip atıyoruz.
+        [HttpPost("add")]
+        public IActionResult Add([FromForm(Name = ("Image"))] IFormFile file, [FromForm] CarImage carImage)
+        {
+            var result = _carImageService.Add(file, carImage);
+            if (result.Success)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
+        }
+
+        [HttpPost("update")]
+        public IActionResult Update([FromForm] CarImage carImage, [FromForm(Name = ("Image"))] IFormFile file)
+        {
+            var result = _carImageService.Update(file, carImage);
+            if (result.Success)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
+        }
+
+        [HttpPost("delete")]
+        public IActionResult Delete([FromForm(Name = ("Id"))] int Id)
+        {
+            var carImage = _carImageService.GetByImageId(Id).Data;
+
+            var result = _carImageService.Delete(carImage);
+            if (result.Success)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
+        }
+
+
     }
 }
 

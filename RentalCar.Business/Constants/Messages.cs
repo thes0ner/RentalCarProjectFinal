@@ -71,5 +71,8 @@ namespace RentalCar.Business.Constants
         public static string UserRegistered = "User successfully registered";
         public static string AccessTokenCreated = "Access token successfully created.";
         public static string AccessTokenFaild = "Failed to create token.";
+        internal static string ListedCarDetailsByColor = "Listed Cars.";
+        internal static string ListedCarDetailsByCar = "Listed Cars.";
+        internal static string MaintenanceTime = "Maintenance time.";
     }
 }

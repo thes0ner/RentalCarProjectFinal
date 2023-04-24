@@ -9,78 +9,57 @@ using System.Threading.Tasks;
 
 namespace RentalCar.Core.Utilities.Helpers.FileHelper
 {
-    public class FileHelperManager : IFileHelper
+    public class FileHelper
     {
-        public void Delete(string filePath)
+        public static string Add(IFormFile file)
         {
-            if (File.Exists(filePath))
+            //Benzersiz isimde 0 baytlık geçiçi bir dosya oluşturup, bu doysanın adresini sourcePath değişkenine atmış oluyoruz
+            var sourcePath = Path.GetTempFileName(); 
+            
+            //Burada Ekleyeceğimiz dosyanın uzunluğunu bayt ile hesaplıyoruz ve Gerçekten dosya gelmiş mi gelmemiş mi diye kontrol yapıyoruz.
+            if (file.Length > 0) 
             {
-                File.Delete(filePath);
-            }
-        }
-
-        public string Update(IFormFile file, string filePath, string root)
-        {
-            if (File.Exists(filePath))
-            {
-                File.Delete(filePath);
-            }
-            return Upload(file, root);
-        }
-
-        public string Upload(IFormFile file, string root)
-        {
-            if (file.Length > 0)
-            {
-                if (!Directory.Exists(root))
+                using (var stream = new FileStream(sourcePath, FileMode.Create)) // Filestream sınıfı bizim dosya okuma,yazma,atlama işlemlerini yapıyor. FileMode.Create Dosya oluşturuyor veya varsa üzerine yazıyor.
                 {
-                    Directory.CreateDirectory(root);
-                }
-                string extension = Path.GetExtension(file.FileName);
-                string guid = Guid.NewGuid().ToString();
-                string filePath = guid + extension;
-
-                using (FileStream fileStream = File.Create(root + filePath))
-                {
-                    file.CopyTo(fileStream);
-                    fileStream.Flush();
-                    return filePath;
+                    //Dosyamızı sourcePath'teki oluşturduğumuz dosya üzerine yazıyoruz.
+                    file.CopyTo(stream); 
                 }
             }
-            return null;
+            
+            //Dosyamızın adını fileInfo değişkenine aktardık. FileInfo sınıfı Dosya yolu işlemleri için kullanılan sınıftır.
+            FileInfo fileInfo = new FileInfo(file.FileName); 
+            
+            //Dosya adını ve uzantısını fileExtension değişkenine aktardık. 
+            string fileExtension = fileInfo.Extension; 
+            
+            //Guid.NewGuid().ToString() ifadesi bize eşsiz, benzersiz bir isim oluşturdu ve stringe çevirdi.
+            var path = Guid.NewGuid().ToString() + "_" + DateTime.Now.Month + "_" + DateTime.Now.Day + "_" + DateTime.Now.Year + fileExtension;
+
+            //Burda yeni bir dizin oluşturduk.
+            var result = NewPath(path); 
+
+            //Dosyamızı yeni oluşturğumuz dizine aktardık.
+            File.Move(sourcePath, result); 
+            return path;
+        }
+
+        public static void Delete(string path)
+        {
+            File.Delete(path);
+        }
+
+        public static string Update(string oldPath, IFormFile file)
+        {
+            Delete(oldPath);
+            return Add(file);
+        }
+
+        private static string NewPath(string file)
+        {
+            string path = Environment.CurrentDirectory + @"\wwwroot\Uploads\Images";
+
+            string result = $@"{path}\{file}";
+            return result;
         }
     }
 }
-
-#region MyRegion
-
-//private static IResult CheckFileExists(IFormFile file)
-//{
-//    if (file != null && file.Length > 0)
-//    {
-//        return new SuccessResult();
-//    }
-//    return new ErrorResult("File Does Not Exist!");
-//}
-
-
-
-
-//private static IResult CheckFileTypeValid(string type)
-//{
-//    if (type == ".jpeg" || type == ".png" || type == ".JPG" || type == ".jpg" || type == ".JPEG" || type == ".PNG")
-//    {
-//        return new SuccessResult();
-//    }
-//    return new ErrorResult("File Type Is Wrong! It Has To Be ('.jpeg', '.png' or '.jpg')");
-
-//}
-//private static void DeleteOldImageFile(string directory)
-//{
-//    var fullDirectory = Environment.CurrentDirectory + "\\wwwroot" + directory;
-//    if (File.Exists(fullDirectory))
-//    {
-//        File.Delete(fullDirectory);
-//    }
-//}
-#endregion
