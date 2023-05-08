@@ -71,8 +71,16 @@ namespace RentalCar.Business.Constants
         public static string UserRegistered = "User successfully registered";
         public static string AccessTokenCreated = "Access token successfully created.";
         public static string AccessTokenFaild = "Failed to create token.";
-        internal static string ListedCarDetailsByColor = "Listed Cars.";
-        internal static string ListedCarDetailsByCar = "Listed Cars.";
-        internal static string MaintenanceTime = "Maintenance time.";
+        public static string ListedCarDetailsByColor = "Listed Cars.";
+        public static string ListedCarDetailsByCar = "Listed Cars.";
+        public static string MaintenanceTime = "Maintenance time.";
+        
+        public static string CarIsNotAvailable = "The car is rented by another customer between the given dates";
+        public static string AddRental = "Rental Successful";
+        public static string RentalDateOk = "The car is available for rent within these dates";
+        public static string RentalReturnDateError = "We're sorry!,This car is rented by another customer";
+        internal static string CreditCardAdded = "Added.";
+        internal static string CreditCardRemoved = "Removed";
+        internal static string CreditCardCustomersListed = "Cards listed.";
     }
 }

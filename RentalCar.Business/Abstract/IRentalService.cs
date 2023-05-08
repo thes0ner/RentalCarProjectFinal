@@ -18,5 +18,6 @@ namespace RentalCar.Business.Abstract
         IDataResult<Rental> GetById(int id);
         IDataResult<List<Rental>> GetAll();
         IDataResult<List<RentalDetailDto>> GetRentalDetails();
+        IResult CheckCarStatus(Rental rental);
     }
 }

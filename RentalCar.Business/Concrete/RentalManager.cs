@@ -32,26 +32,38 @@ namespace RentalCar.Business.Concrete
             _rentalDal = rentalDal;
         }
 
-        [SecuredOperation("Rental.all,Admin")]
+        //[SecuredOperation("Rental.all,Admin")]
         [ValidationAspect(typeof(RentalValidator))]
         [CacheRemoveAspect("IRentalService.Get")]
         public IResult Add(Rental rental)
         {
-            var result = BusinessRules.Run(CheckIfRentalExist(rental.Id));
+            IResult result = BusinessRules.Run(CheckAvailability(rental.CarId, rental.RentDate));
             if (result != null)
             {
                 return result;
-            }
 
+            }
             _rentalDal.Add(rental);
-            return new SuccessResult(Messages.AddedRental);
+            return new SuccessResult();
         }
 
-        [SecuredOperation("Rental.all,Admin")]
+        public IResult CheckCarStatus(Rental rental)
+        {
+            if (_rentalDal.CheckCarStatus(rental.CarId, rental.RentDate, rental.ReturnDate))
+            {
+                return new SuccessResult(Messages.RentalDateOk);
+            }
+            return new ErrorResult(Messages.RentalReturnDateError);
+        }
+
+
+
+        //[SecuredOperation("Rental.all,Admin")]
         [CacheRemoveAspect("IRentalService.Get")]
         public IResult Delete(Rental rental)
         {
-            var result = BusinessRules.Run(CheckIfRecordDeleteExist(rental.Id));
+            IResult result = BusinessRules.Run(CheckAvailability(rental.CarId, rental.RentDate));
+
             if (result != null)
             {
                 return result;
@@ -61,8 +73,8 @@ namespace RentalCar.Business.Concrete
             return new SuccessResult(Messages.DeletedRental);
         }
 
-        [SecuredOperation("Rental.all,Admin")]
-        [ValidationAspect(typeof(RentalValidator))]
+        //[SecuredOperation("Rental.all,Admin")]
+        //[ValidationAspect(typeof(RentalValidator))]
         [CacheRemoveAspect("IRentalService.Get")]
         public IResult Update(Rental rental)
         {
@@ -77,14 +89,14 @@ namespace RentalCar.Business.Concrete
         }
 
 
-        [SecuredOperation("Rental.all,Admin")]
+        //[SecuredOperation("Rental.all,Admin")]
         [CacheAspect]
         public IDataResult<List<Rental>> GetAll()
         {
             return new SuccessDataResult<List<Rental>>(_rentalDal.GetAll(), Messages.ListedRentals);
         }
 
-        [SecuredOperation("Rental.all,Admin")]
+        //[SecuredOperation("Rental.all,Admin")]
         [CacheAspect]
         public IDataResult<Rental> GetById(int id)
         {
@@ -140,5 +152,31 @@ namespace RentalCar.Business.Concrete
                 return new SuccessResult();
             }
         }
+
+
+
+        //Bussines logic and validation for renting car!
+        //Checks the availability of the car.
+        private IResult CheckAvailability(int carId, DateTime newRentDate)
+        {
+            var result = _rentalDal.GetAll(c => c.CarId == carId);
+            if (result != null)
+            {
+                for (int i = 0; i < result.Count; i++)
+                {
+                    if (result[i].ReturnDate > newRentDate)
+                    {
+                        return new ErrorResult(Messages.CarIsNotAvailable);
+                    }
+
+                }
+
+            }
+            return new SuccessResult();
+
+        }
+
     }
+
 }
+

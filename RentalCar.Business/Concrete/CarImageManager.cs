@@ -97,7 +97,7 @@ namespace RentalCar.Business.Concrete
 
         private List<CarImage> CheckIfCarImageNull(int carId)
         {
-            string path = @"default.jpg";
+            string path = @"default-car.jpg";
             var result = _carImageDal.GetAll(c => c.CarId == carId).Any();
             if (!result)
             {

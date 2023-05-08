@@ -23,36 +23,46 @@ namespace RentalCar.DataAccess.Concrete.EntityFramework
                              join user in context.Users on customer.UserId equals user.Id
                              select new RentalDetailDto()
                              {
+                                 Id = rental.Id,
+                                 CarId = rental.CarId,
+                                 CustomerId = customer.Id,
                                  FullName = user.FirstName + " " + user.LastName,
                                  BrandName = brand.Name + " " + car.Model,
-                                 ReturnDate = Convert.ToDateTime(rental.ReturnDate),
+                                 ReturnDate = rental.ReturnDate,
                                  RentalDate = rental.RentDate
                              };
                 return result.ToList();
+            }
+        }
 
 
-                //var result = from re in context.Rentals
-                //             join br in context.Brands
-                //             on re.Id equals br.Id
-                //             join cu in context.Customers
-                //             on re.Id equals cu.Id
-                //             join ca in context.Cars
-                //             on re.Id equals ca.Id
-                //             select new RentalDetailDto
-                //             {
-                //                 FirstName = cu.FirstName,
-                //                 LastName = cu.LastName,
-                //                 BrandName = br.Name,
-                //                 Model = ca.Model,
-                //                 Year = ca.Year,
-                //                 DailyPrice = ca.DailyPrice,
-                //                 TotalDays = re.TotalDays,
-                //                 RentDate = re.RentDate,
-                //                 ReturnDate = re.ReturnDate,
-                //                 TotalPrice = re.TotalPrice
+        public bool CheckCarStatus(int carId, DateTime rentDate, DateTime returnDate)
+        {
+            using (RentalCarContextDb context = new RentalCarContextDb())
+            {
 
-                //             };
-                //return result.ToList();
+                if (rentDate >= returnDate)
+                {
+                    return false;
+                }
+
+                bool checkReturnDateIsNull = context.Set<Rental>().Any(p => p.CarId == carId && p.ReturnDate == null);
+
+                bool isValidRentDate = context.Set<Rental>()
+                                    .Any(r => r.CarId == carId && (
+                                            (rentDate >= r.RentDate && rentDate < r.ReturnDate) ||
+                                            (returnDate >= r.RentDate && returnDate <= r.ReturnDate) ||
+                                            (r.RentDate >= rentDate && r.RentDate <= returnDate)||
+                                            (rentDate == r.RentDate && returnDate == r.ReturnDate)
+                                            )
+                                    );
+
+                if ((!checkReturnDateIsNull) && (!isValidRentDate))
+                {
+                    return true;
+                }
+
+                return false;
             }
         }
     }

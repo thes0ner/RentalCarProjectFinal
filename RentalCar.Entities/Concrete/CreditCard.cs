@@ -7,15 +7,15 @@ using System.Threading.Tasks;
 
 namespace RentalCar.Entities.Concrete
 {
-    public class Rental : IEntity
+    public class CreditCard :IEntity
     {
         public int Id { get; set; }
-        public int CarId { get; set; }
         public int CustomerId { get; set; }
-        public DateTime RentDate { get; set; }
-        public DateTime ReturnDate { get; set; }
-        public decimal TotalPrice { get; set; }
+        public string FullName { get; set; }
+        public string CardNumber { get; set; }
+        public string CVV { get; set; }
+        public int Months { get; set; }
+        public int Year { get; set; }
 
     }
 }
-

@@ -12,17 +12,23 @@ namespace RentalCar.Business.ValidationRules.FluentValidation
     {
         public RentalValidator()
         {
-            RuleFor(r => r.CarId).NotEmpty().GreaterThan(0);
-            RuleFor(r => r.CustomerId).NotEmpty().GreaterThan(0);
-            RuleFor(r => r.TotalDays).NotEmpty().GreaterThan(0);
-            RuleFor(r => r.RentDate).NotEmpty().Must(BeAValidDate).LessThan(r => r.ReturnDate);
-            RuleFor(r => r.ReturnDate).NotEmpty().Must(BeAValidDate).GreaterThan(r => r.RentDate);
-            RuleFor(r => r.TotalPrice).NotEmpty().GreaterThan(0);
+            RuleFor(r => r.CarId).NotEmpty();
+            RuleFor(r => r.CarId).NotEqual(0);
+            RuleFor(r => r.CustomerId).NotEmpty();
+            RuleFor(r => r.CustomerId).NotEqual(0);
+            RuleFor(r => r.RentDate).NotEmpty();
+            RuleFor(r => r.ReturnDate).NotEmpty();
+            RuleFor(r => r.ReturnDate).Must(NotNow);
         }
 
-        private bool BeAValidDate(DateTime date)
+        private bool NotNow(DateTime arg)
         {
-            return date != default && date > DateTime.MinValue && date < DateTime.MaxValue;
+            if (arg == DateTime.Now)
+            {
+                return false;
+            }
+
+            return true;
         }
     }
 }

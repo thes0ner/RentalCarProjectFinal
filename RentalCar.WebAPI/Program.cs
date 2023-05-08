@@ -61,6 +61,9 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+//Middleware
+app.ConfigureCustomExceptionMiddleware();
+
 //CORS Request!
 app.UseCors(builder=>builder.WithOrigins("http://localhost:4200").AllowAnyHeader());
 
@@ -69,5 +72,7 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.UseStaticFiles();
 
 app.Run();
