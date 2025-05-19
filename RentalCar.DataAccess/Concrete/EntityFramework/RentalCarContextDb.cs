@@ -37,7 +37,7 @@ namespace RentalCar.DataAccess.Concrete.EntityFramework
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseSqlServer(@"Server=SONER\ADMINSERVER;Database=RentalCarDb;Trusted_Connection=true;MultipleActiveResultSets=false;TrustServerCertificate=Yes");
+                optionsBuilder.UseSqlServer(@"Server=ADMIN;Database=RentalDb;Trusted_Connection=True;MultipleActiveResultSets=False;TrustServerCertificate=Yes");
             }
         }
 

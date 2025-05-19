@@ -31,9 +31,9 @@ namespace RentalCar.Business.Concrete
             _brandDal = brandDal;
         }
 
-        [SecuredOperation("Brand.all,Admin")]
-        [ValidationAspect(typeof(BrandValidator))]
-        [CacheRemoveAspect("IBrandService.Get")]
+        //[SecuredOperation("Brand.all,Admin")]
+        //[ValidationAspect(typeof(BrandValidator))]
+        //[CacheRemoveAspect("IBrandService.Get")]
         public IResult Add(Brand brand)
         {
 
