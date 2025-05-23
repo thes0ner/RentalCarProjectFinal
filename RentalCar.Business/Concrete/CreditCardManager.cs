@@ -1,4 +1,5 @@
 ﻿using RentalCar.Business.Abstract;
+using RentalCar.Business.BusinessAspects.Autofac;
 using RentalCar.Business.Constants;
 using RentalCar.Core.Utilities.Results.Abstract;
 using RentalCar.Core.Utilities.Results.Concrete;
@@ -22,12 +23,21 @@ namespace RentalCar.Business.Concrete
             _creditCardDal = creditCardDal;
         }
 
+        [SecuredOperation("user,Admin")]
         public IResult Add(CreditCard creditCard)
         {
             _creditCardDal.Add(creditCard);
             return new SuccessResult(Messages.CreditCardAdded);
         }
 
+        [SecuredOperation("user,Admin")]
+        public IResult Update(CreditCard creditCard)
+        {
+            _creditCardDal.Update(creditCard);
+            return new SuccessResult(Messages.CreditCardUpdated);
+        }
+
+        [SecuredOperation("user,Admin")]
         public IResult Delete(CreditCard creditCard)
         {
             _creditCardDal.Delete(creditCard);

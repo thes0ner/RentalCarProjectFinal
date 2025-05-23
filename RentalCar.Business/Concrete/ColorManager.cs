@@ -31,7 +31,7 @@ namespace RentalCar.Business.Concrete
             _colorDal = colorDal;
         }
 
-        [SecuredOperation("Color.all,Admin")]
+        [SecuredOperation("Admin")]
         [ValidationAspect(typeof(ColorValidator))]
         [CacheRemoveAspect("IColorService.Get")]
         public IResult Add(Color color)
@@ -47,7 +47,7 @@ namespace RentalCar.Business.Concrete
         }
 
 
-        [SecuredOperation("Color.all,Admin")]
+        [SecuredOperation("Admin")]
         [CacheRemoveAspect("IColorService.Get")]
         public IResult Delete(Color color)
         {
@@ -61,7 +61,7 @@ namespace RentalCar.Business.Concrete
             return new SuccessResult(Messages.DeletedColor);
         }
 
-        [SecuredOperation("Color.all,Admin")]
+        [SecuredOperation("Admin")]
         [ValidationAspect(typeof(ColorValidator))]
         [CacheRemoveAspect("IColorService.Get")]
         public IResult Update(Color color)
@@ -75,14 +75,14 @@ namespace RentalCar.Business.Concrete
             return new SuccessResult(Messages.UpdatedColor);
         }
 
-        //[SecuredOperation("Color.all,Admin")]
+        [SecuredOperation("user,Admin")]
         [CacheAspect]
         public IDataResult<List<Color>> GetAll()
         {
             return new SuccessDataResult<List<Color>>(_colorDal.GetAll(), Messages.ListedColors);
         }
 
-        [SecuredOperation("Color.all,Admin")]
+        [SecuredOperation("user,Admin")]
         [CacheAspect]
         public IDataResult<Color> GetById(int id)
         {

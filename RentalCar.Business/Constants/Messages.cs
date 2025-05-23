@@ -79,8 +79,10 @@ namespace RentalCar.Business.Constants
         public static string AddRental = "Rental Successful";
         public static string RentalDateOk = "The car is available for rent within these dates";
         public static string RentalReturnDateError = "We're sorry!,This car is rented by another customer";
-        internal static string CreditCardAdded = "Added.";
-        internal static string CreditCardRemoved = "Removed";
-        internal static string CreditCardCustomersListed = "Cards listed.";
+
+        public static string CreditCardAdded = "Added.";
+        public static string CreditCardRemoved = "Removed";
+        public static string CreditCardUpdated = "Updated";
+        public static string CreditCardCustomersListed = "Cards listed.";
     }
 }

@@ -31,9 +31,9 @@ namespace RentalCar.Business.Concrete
             _brandDal = brandDal;
         }
 
-        //[SecuredOperation("Brand.all,Admin")]
-        //[ValidationAspect(typeof(BrandValidator))]
-        //[CacheRemoveAspect("IBrandService.Get")]
+        [SecuredOperation("Admin")]
+        [ValidationAspect(typeof(BrandValidator))]
+        [CacheRemoveAspect("IBrandService.Get")]
         public IResult Add(Brand brand)
         {
 
@@ -48,7 +48,7 @@ namespace RentalCar.Business.Concrete
             return new SuccessResult(Messages.AddedBrand);
         }
 
-        [SecuredOperation("Brand.all,Admin")]
+        [SecuredOperation("Admin")]
         [CacheRemoveAspect("IBrandService.Get")]
         public IResult Delete(Brand brand)
         {
@@ -62,7 +62,7 @@ namespace RentalCar.Business.Concrete
             return new SuccessResult(Messages.DeletedBrand);
         }
 
-        [SecuredOperation("Brand.all,Admin")]
+        [SecuredOperation("Admin")]
         [ValidationAspect(typeof(BrandValidator))]
         [CacheRemoveAspect("IBrandService.Get")]
         public IResult Update(Brand brand)
@@ -78,14 +78,14 @@ namespace RentalCar.Business.Concrete
             return new SuccessResult(Messages.UpdatedBrand);
         }
 
-        //[SecuredOperation("Brand.all,Admin")]
+        [SecuredOperation("user,Admin")]
         [CacheAspect]
         public IDataResult<List<Brand>> GetAll()
         {
             return new SuccessDataResult<List<Brand>>(_brandDal.GetAll(), Messages.ListedBrands);
         }
 
-        //[SecuredOperation("Brand.all,Admin")]
+        [SecuredOperation("user,Admin")]
         [CacheAspect]
         public IDataResult<Brand> GetById(int id)
         {

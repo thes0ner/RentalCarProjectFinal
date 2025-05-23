@@ -42,7 +42,7 @@ namespace RentalCar.WebAPI.Controllers
         }
 
 
-        [HttpPost("delete")]
+        [HttpDelete("delete")]
         public IActionResult Delete(Color color)
         {
             var result = _colorService.Delete(color);

@@ -13,6 +13,7 @@ namespace RentalCar.Entities.Concrete
         public int BrandId { get; set; }
         public int ColorId { get; set; }
         public string? Model { get; set; }
+        public string Plate { get; set; }
         public int Year { get; set; }
         public decimal DailyPrice { get; set; }
         public string? FuelType { get; set; }

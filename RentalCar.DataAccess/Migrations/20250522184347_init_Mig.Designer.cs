@@ -12,8 +12,8 @@ using RentalCar.DataAccess.Concrete.EntityFramework;
 namespace RentalCar.DataAccess.Migrations
 {
     [DbContext(typeof(RentalCarContextDb))]
-    [Migration("20250519184239_mig_init")]
-    partial class miginit
+    [Migration("20250522184347_init_Mig")]
+    partial class initMig
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -143,6 +143,10 @@ namespace RentalCar.DataAccess.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Model")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Plate")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Year")

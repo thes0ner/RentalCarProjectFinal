@@ -73,7 +73,7 @@ namespace RentalCar.WebAPI.Controllers
             return BadRequest(result);
         }
 
-        [HttpPost("delete")]
+        [HttpDelete("delete")]
         public IActionResult Delete([FromForm(Name = ("Id"))] int Id)
         {
             var carImage = _carImageService.GetByImageId(Id).Data;

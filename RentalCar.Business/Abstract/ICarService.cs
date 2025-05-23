@@ -20,5 +20,7 @@ namespace RentalCar.Business.Abstract
         IDataResult<List<CarDetailDto>> GetCarDetailByColorAndBrandId(int brandId, int colorId);
         IDataResult<List<Car>> GetAllByDailyPrice(short min, short max);
         IResult Add(Car car);
+        IResult Update(Car car);
+        IResult Delete(Car car);
     }
 }

@@ -21,7 +21,7 @@ namespace RentalCar.WebAPI.Controllers
         public IActionResult GetAllByCustomerId(int customerId)
         {
             var result = _creditCardService.GetAllByCustomerId(customerId);
-            if (result.Success) return Ok(result);
+            if (result.Success) return Ok(result.Data);
             return BadRequest(result);
         }
 
@@ -42,16 +42,22 @@ namespace RentalCar.WebAPI.Controllers
             return BadRequest(result);
         }
 
-        [HttpPost("delete")]
+        [HttpPost("update")]
+        public IActionResult Update(CreditCard creditCard)
+        {
+            var result = _creditCardService.Update(creditCard);
+            if (result.Success) return Ok(result);
+            return BadRequest(result);
+        }
+
+
+        [HttpDelete("delete")]
         public IActionResult Delete(CreditCard creditCard)
         {
             var result = _creditCardService.Delete(creditCard);
             if (result.Success) return Ok(result);
             return BadRequest(result);
         }
-
-
-
 
 
     }

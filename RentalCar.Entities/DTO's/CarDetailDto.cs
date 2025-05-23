@@ -15,6 +15,7 @@ namespace RentalCar.Entities.DTO_s
         public string? BrandName { get; set; }
         public string? ColorName { get; set; }
         public string? Model { get; set; }
+        public string Plate { get; set; }
         public int Year { get; set; }
         public decimal DailyPrice { get; set; }
         public string? Description { get; set; }

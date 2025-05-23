@@ -82,20 +82,21 @@ namespace RentalCar.Business.Concrete
             return new SuccessResult(Messages.UpdatedCustomer);
         }
 
-        [SecuredOperation("Admin")]
+        [SecuredOperation("user,Admin")]
         [CacheAspect]
         public IDataResult<List<Customer>> GetAll()
         {
             return new SuccessDataResult<List<Customer>>(_customerDal.GetAll(), Messages.ListedCustomers);
         }
 
-        [SecuredOperation("Admin")]
+        [SecuredOperation("user,Admin")]
         [CacheAspect]
         public IDataResult<Customer> GetById(int id)
         {
             return new SuccessDataResult<Customer>(_customerDal.Get(c => c.Id == id));
         }
 
+        [SecuredOperation("user,Admin")]
         public IDataResult<List<CustomerDetailDto>> GetCustomerDetails()
         {
             return new SuccessDataResult<List<CustomerDetailDto>>(_customerDal.GetCustomerDetails());
